@@ -46,8 +46,8 @@ namespace Lab2
             double answer = 0;
 
             // code here
-            int nPrevPrev = 1, dPrevPrev = 1;
-            int nPrev = 2, dPrev = 1;
+            int nPrevPrev = 1, dPrevPrev = 2;
+            int nPrev = 3, dPrev = 2;
 
             double prevValue = (double)nPrev / dPrev;
 
@@ -82,7 +82,7 @@ namespace Lab2
             int n = 0;
             double current = b;
             // code here
-            while (Math.Abs(current) > E)
+            while (Math.Abs(current) >= E)
             {
                 current *= q;
                 n++;
@@ -130,8 +130,8 @@ namespace Lab2
             grains *= 2;
         }
 
-        decimal grams = (decimal)totalGrains / 15;
-        decimal tons = grams / 1000000;
+        decimal grams = (decimal)totalGrains / 15m;
+        decimal tons = grams / 1000000m;
         answer = (long)Math.Floor(tons);
 
             // end
@@ -144,16 +144,17 @@ namespace Lab2
             int answer = 0;
 
             // code here
+            int months = 0;
+            double currentAmount = S;
+            double monthlyRate = d / 12.0 / 100.0; // Monthly interest rate
 
-               double monthlyRate = d / 1200.0;
-                double sum = S;
+            while (currentAmount < 2 * S)
+            {
+                currentAmount *= (1 + monthlyRate);
+                months++;
+            }
 
-        while (sum < 2 * S)
-        {
-            sum *= (1 + monthlyRate);
-            answer++;
-        }
-
+            answer = months;
             // end
 
             return answer;
@@ -164,23 +165,27 @@ namespace Lab2
             double SY = 0;
 
             // code here
-
-        for (double x = a; x <= b + 1e-12; x += h)
-        {
-            double term = 1.0;   // first term
-            double seriesSum = term;
-            int i = 1;
-
-            while (Math.Abs(term) >= E)
+            for (double x = a; x <= b + 1e-12; x += h)
             {
-                term *= -x * x / ((2 * i - 1) * (2 * i)); 
-                seriesSum += term;
-                i++;
-            }
+                double term = 1.0; 
+                double seriesSum = term;
+                int i = 1;
+                double xSquared = x * x;
 
-            SS += seriesSum;
-            SY += Math.Cos(x);
-        }
+                while (true)
+                {
+                    term = term * (-xSquared) / ((2 * i - 1) * (2 * i));
+                    
+                    if (Math.Abs(term) < E)
+                        break;
+                        
+                    seriesSum += term;
+                    i++;
+                }
+
+                SS += seriesSum;
+                SY += Math.Cos(x);
+            }
 
             // end
 
